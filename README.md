@@ -14,13 +14,13 @@ This project helps manage employees efficiently with CRUD operations (Create, Re
 * ⚛️ React.js
 * 🎨 Tailwind CSS
 * 📦 Axios (API calls)
+* 🔥 Firebase (Google signin)
 
 ### **Backend (ems\_backend)**
 
 * ☕ Java 17+
 * 🚀 Spring Boot (Spring Web, Spring Data JPA)
 * 🗄️ MySQL (Database)
-* 🔑 Spring Security (optional if authentication is needed)
 
 ---
 
