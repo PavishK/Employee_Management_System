@@ -123,7 +123,8 @@ cd ems
 
 ## 📸 Screenshots (Optional)
 
-*Add screenshots of UI once available*
+<img width="1900" height="936" alt="image" src="https://github.com/user-attachments/assets/3764d953-efcf-46c2-a866-5f6a6daf4361" />
+
 
 ---
 
