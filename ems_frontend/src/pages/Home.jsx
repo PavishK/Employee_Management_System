@@ -10,13 +10,15 @@ export default function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [userID, setUserId] = useState(0);
-  const [makeLoading, setMakeLoading] = useState(true);
+  const [makeLoading, setMakeLoading] = useState(false);
 
   const apiUrl = import.meta.env.VITE_SERVER_API;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+
       if (currentUser) {
+        setMakeLoading(true);
         setUser(currentUser);
         await loginHandler(currentUser); // pass currentUser directly
       } else {
