@@ -9,66 +9,61 @@ import axios from "axios";
 export default function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [userID, setUserId] = useState(0);
-  const [makeLoading, setMakeLoading] = useState(false);
+  const [userID, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true); // smoother state
 
   const apiUrl = import.meta.env.VITE_SERVER_API;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-
       if (currentUser) {
-        setMakeLoading(true);
         setUser(currentUser);
-        await loginHandler(currentUser); // pass currentUser directly
+        try {
+          const body = {
+            username: currentUser.displayName,
+            email: currentUser.email,
+            imageUrl: currentUser.photoURL,
+          };
+
+          const res = await axios.post(`${apiUrl}/api/user/save-signin-data`, body);
+          setUserId(res.data.user.id);
+
+          // small delay only for smoother UX
+          setTimeout(() => {
+            navigate(`/user/dashboard/${res.data.user.id}`);
+          }, 500);
+
+          toast.success(res.data.message);
+        } catch (error) {
+          console.error(error);
+          toast.error("Login failed. Please try again.");
+          await signOut(auth);
+          setUser(null);
+        }
       } else {
         setUser(null);
       }
-      setMakeLoading(false);
+      setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
-
-  const loginHandler = async (currentUser) => {
-    if (!currentUser) return;
-
-    setMakeLoading(true);
-    try {
-      const body = {
-        username: currentUser.displayName,
-        email: currentUser.email,
-        imageUrl: currentUser.photoURL,
-      };
-
-      const res = await axios.post(apiUrl + "/api/user/save-signin-data", body);
-      setUserId(res.data.user.id);
-      toast.success(res.data.message);
-    } catch (error) {
-      console.error(error);
-      await signOut(auth);
-      setUser(null);
-      toast.error("Login failed. Please try again.");
-    } finally {
-      setMakeLoading(false);
-    }
-  };
+  }, [navigate, apiUrl]);
 
   const handleGoogleLogin = async () => {
-    setMakeLoading(true);
+    setLoading(true);
     try {
       await signInWithPopup(auth, provider);
-      // onAuthStateChanged will handle loginHandler
-      toast.success("Login successfully!");
+      toast.success("Login successful!");
+      // navigation handled automatically by onAuthStateChanged
     } catch (error) {
       console.error(error);
       toast.error("Unable to login with Google!");
-      setMakeLoading(false);
+      setLoading(false);
     }
   };
 
   const handleLogout = async () => {
-    setMakeLoading(true);
+    setLoading(true);
     try {
       await signOut(auth);
       setUser(null);
@@ -77,11 +72,11 @@ export default function Home() {
       console.error(error);
       toast.error("Unable to logout!");
     } finally {
-      setMakeLoading(false);
+      setLoading(false);
     }
   };
 
-  if (makeLoading) return <Loader />;
+  if (loading) return <Loader />;
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
