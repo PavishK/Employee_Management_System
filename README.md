@@ -86,8 +86,8 @@ ems/
 
 ### 🔹 Clone the Repository
 ```bash
-git clone https://github.com/PavishK/Employee_Management_System
-cd ems
+git clone https://github.com/PavishK/Employee_Management_System.git
+cd Employee_Management_System
 ````
 
 ---
@@ -216,5 +216,3 @@ This project is licensed under **MY License**.
 🚀 React | Spring Boot | MySQL | Firebase
 
 ⭐ If you like this project, don’t forget to **star the repo!**
-Just tell me 👍
-```
